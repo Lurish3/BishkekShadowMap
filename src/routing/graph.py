@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, List
+from typing import Any
 
 
 @dataclass(frozen=True)
@@ -30,22 +30,26 @@ class Edge:
 @dataclass
 class RouteAlternative:
     name: str
-    nodes: List[str]
+    nodes: list[str]
     total_distance_km: float
     total_time_min: float
     average_shade: float
     greenery: float
     sidewalk_quality: float
-    explanation: List[str] = field(default_factory=list)
+    stairs: float = 0.0
+    crossings: float = 0.0
+    explanation: list[str] = field(default_factory=list)
 
-    def as_dict(self) -> Dict[str, object]:
+    def as_dict(self) -> dict[str, Any]:
         return {
             "name": self.name,
-            "nodes": self.nodes,
+            "nodes": list(self.nodes),
             "total_distance_km": round(self.total_distance_km, 2),
             "total_time_min": round(self.total_time_min, 1),
             "average_shade": round(self.average_shade, 2),
             "greenery": round(self.greenery, 2),
             "sidewalk_quality": round(self.sidewalk_quality, 2),
-            "explanation": self.explanation,
+            "stairs": round(self.stairs, 2),
+            "crossings": round(self.crossings, 2),
+            "explanation": list(self.explanation),
         }

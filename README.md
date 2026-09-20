@@ -2,89 +2,27 @@
 
 Bishkek Comfort Map is a GIS prototype for finding and analyzing comfortable pedestrian routes in Bishkek. Route selection accounts for distance and travel time, shade, greenery, sidewalks, crossings, and route trade-offs.
 
-## Project Goal
+## Local setup
 
-The project demonstrates comfort-aware pedestrian routing and shows several meaningful alternatives instead of selecting a route based only on the shortest distance.
+The pinned scientific dependencies are intended for Python 3.12 or 3.13. On Arch Linux, Python 3.12 may be installed through `uv`; this avoids installing packages into the system-managed Python environment.
 
-## What the Product Shows
+### Fish shell / Arch Linux
 
-- alternative routes such as fastest, shadiest, and most comfortable;
-- dynamic route changes based on date and time;
-- map layers for solar exposure, greenery, pedestrian infrastructure, and comfort;
-- comparisons by time, distance, shade, greenery, and safety;
-- adjustable weights for sun exposure, greenery, sidewalks, stairs, and speed;
-- route recalculation when parameters change.
-
-## Technology Stack
-
-- Python
-- GeoPandas, Shapely, OSMnx, NetworkX
-- NumPy and Pandas
-- PostgreSQL / PostGIS
-- FastAPI
-- Leaflet / MapLibre
-
-## Architecture
-
-```text
-BishkekShadowMap/
-├── README.md
-├── requirements.txt
-├── .gitignore
-├── app/
-│   ├── main.py
-│   └── README.md
-├── src/
-│   ├── __init__.py
-│   ├── solar/
-│   │   ├── __init__.py
-│   │   └── sun_model.py
-│   ├── routing/
-│   │   ├── __init__.py
-│   │   ├── graph.py
-│   │   └── route_optimizer.py
-│   ├── greenery/
-│   │   └── __init__.py
-│   └── comfort/
-│       ├── __init__.py
-│       └── comfort_model.py
-├── data/
-│   ├── raw/
-│   │   └── README.md
-│   └── processed/
-│       └── README.md
-├── research/
-│   ├── methodology/
-│   │   └── README.md
-│   ├── questionnaire/
-│   │   └── README.md
-│   └── analysis/
-│       └── README.md
-├── results/
-│   └── README.md
-├── tests/
-│   └── test_route_logic.py
-└── docs/
-    └── architecture.md
+```fish
+sudo pacman -Syu
+sudo pacman -S --needed uv
+cd BishkekShadowMap
+rm -rf .venv
+uv python install 3.12
+uv venv --python 3.12 .venv
+source .venv/bin/activate.fish
+uv pip install --python .venv/bin/python -r requirements.txt
+uv run --python .venv/bin/python uvicorn app.main:app --reload
 ```
 
-## Route Model
-
-A road-network node contains an identifier, coordinates, elevation, and surrounding-environment properties. An edge includes distance, walking time, sun exposure, shade ratio, greenery, sidewalk quality, crossings, and stairs.
-
-The objective function is:
-
-`Cost = w_time * t + w_sun * sun_exposure + w_sidewalk * penalty + w_stairs * penalty - w_greenery * greenery`
-
-This supports multi-objective routing and Pareto-optimal alternatives.
-
-## Local Setup
-
-The dependency pins currently target Python 3.12 or 3.13. Python 3.14 may make pip compile NumPy/Matplotlib from source because the pinned versions do not have compatible wheels.
+### Bash / macOS / Linux
 
 ```bash
-git clone https://github.com/Lurish3/BishkekShadowMap.git
-cd BishkekShadowMap
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip setuptools wheel
@@ -92,25 +30,18 @@ python -m pip install --only-binary=:all: -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-If `python3.12` is not available, use `python3.13` in both commands. On Windows, use `py -3.12 -m venv .venv` and `.venv\\Scripts\\activate`.
+Run the tests with:
+
+```bash
+python -m pytest -q
+```
 
 Open the API documentation at <http://127.0.0.1:8000/docs>.
 
-## Roadmap
+## API
 
-- **0.1:** basic A→B route, graph, solar model, time slider, and alternatives;
-- **0.2:** route weights, Pareto optimization, layers, explanations, and comparison;
-- **0.3:** What-if scenarios, Simulate Walk, School Mode, transport, and analytics;
-- **Later:** validation with real-world data and evaluation of the model.
+- `GET /` — service metadata
+- `GET /health` — health check
+- `POST /routes` — validated route alternatives
 
-## Risks and Limitations
-
-The solar model is an estimate rather than a physical measurement. Accuracy depends on the quality and freshness of the source geodata. The project is not intended to provide real-time navigation.
-
-## License
-
-MIT
-
-Author: Lurish3
-
-Repository: https://github.com/Lurish3/BishkekShadowMap
+`POST /routes` accepts ISO date/time values and non-negative weights from 0 to 10. Invalid values receive a `422` response instead of reaching the route model.
