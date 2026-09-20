@@ -1,6 +1,6 @@
 # Bishkek Comfort Map
 
-Bishkek Comfort Map is a GIS prototype for finding and analyzing comfortable pedestrian routes in Bishkek. Route selection accounts for distance and travel time, shade, greenery, sidewalks, crossings, safety, and changing conditions throughout the day.
+Bishkek Comfort Map is a GIS prototype for finding and analyzing comfortable pedestrian routes in Bishkek. Route selection accounts for distance and travel time, shade, greenery, sidewalks, crossings, and route trade-offs.
 
 ## Project Goal
 
@@ -70,7 +70,7 @@ BishkekShadowMap/
 
 ## Route Model
 
-A road-network node contains an identifier, coordinates, elevation, and surrounding-environment properties. An edge includes distance, walking time, sun exposure, shade ratio, greenery, sidewalk quality, stairs, crossings, transport access, and time-dependent conditions.
+A road-network node contains an identifier, coordinates, elevation, and surrounding-environment properties. An edge includes distance, walking time, sun exposure, shade ratio, greenery, sidewalk quality, crossings, and stairs.
 
 The objective function is:
 
@@ -80,14 +80,19 @@ This supports multi-objective routing and Pareto-optimal alternatives.
 
 ## Local Setup
 
+The dependency pins currently target Python 3.12 or 3.13. Python 3.14 may make pip compile NumPy/Matplotlib from source because the pinned versions do not have compatible wheels.
+
 ```bash
 git clone https://github.com/Lurish3/BishkekShadowMap.git
 cd BishkekShadowMap
-python -m venv .venv
+python3.12 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install --only-binary=:all: -r requirements.txt
 uvicorn app.main:app --reload
 ```
+
+If `python3.12` is not available, use `python3.13` in both commands. On Windows, use `py -3.12 -m venv .venv` and `.venv\\Scripts\\activate`.
 
 Open the API documentation at <http://127.0.0.1:8000/docs>.
 
