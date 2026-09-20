@@ -69,7 +69,6 @@ def get_routes(payload: RouteRequest) -> dict[str, object]:
         time=payload.time.strftime("%H:%M"),
         weights=weights,
     )
-
     return {
         "origin": payload.origin,
         "destination": payload.destination,

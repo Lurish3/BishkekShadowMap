@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+from math import isfinite
 from typing import Any
 
 from src.routing.graph import RouteAlternative
@@ -12,6 +13,7 @@ DEFAULT_WEIGHTS: dict[str, float] = {
     "stairs": 0.8,
     "speed": 1.0,
 }
+MAX_WEIGHT = 10.0
 
 
 def _normalise_weights(weights: Mapping[str, float] | None) -> dict[str, float]:
@@ -21,19 +23,20 @@ def _normalise_weights(weights: Mapping[str, float] | None) -> dict[str, float]:
             if name not in result:
                 continue
             numeric = float(value)
-            if numeric < 0:
-                raise ValueError(f"weight '{name}' must not be negative")
+            if not isfinite(numeric) or not 0.0 <= numeric <= MAX_WEIGHT:
+                raise ValueError(f"weight '{name}' must be finite and between 0 and {MAX_WEIGHT}")
             result[name] = numeric
     return result
 
 
 def _weighted_route_score(route: RouteAlternative, weights: Mapping[str, float]) -> float:
-    speed_penalty = route.total_time_min * weights["speed"]
-    sun_penalty = (100.0 - route.average_shade) * weights["sun"]
-    greenery_gain = route.greenery * weights["greenery"]
-    sidewalk_gain = route.sidewalk_quality * weights["sidewalk"]
-    stairs_penalty = route.stairs * weights["stairs"]
-    return speed_penalty + sun_penalty - greenery_gain - sidewalk_gain + stairs_penalty
+    return (
+        route.total_time_min * weights["speed"]
+        + (100.0 - route.average_shade) * weights["sun"]
+        - route.greenery * weights["greenery"]
+        - route.sidewalk_quality * weights["sidewalk"]
+        + route.stairs * weights["stairs"]
+    )
 
 
 def build_demo_routes(
@@ -52,43 +55,21 @@ def build_demo_routes(
     normalised_weights = _normalise_weights(weights)
     routes = [
         RouteAlternative(
-            name="fast",
-            nodes=[origin, "N1", "N2", "N3", destination],
-            total_distance_km=1.4,
-            total_time_min=18.0,
-            average_shade=32.0,
-            greenery=24.0,
-            sidewalk_quality=69.0,
-            stairs=1.0,
+            "fast", [origin, "N1", "N2", "N3", destination], 1.4, 18.0, 32.0, 24.0, 69.0, 1.0,
             explanation=["Небольшое расстояние", "Один из самых быстрых вариантов", "Меньше зелени и тени"],
         ),
         RouteAlternative(
-            name="shaded",
-            nodes=[origin, "N4", "N5", "N6", destination],
-            total_distance_km=1.6,
-            total_time_min=21.0,
-            average_shade=76.0,
-            greenery=41.0,
-            sidewalk_quality=73.0,
-            stairs=0.0,
+            "shaded", [origin, "N4", "N5", "N6", destination], 1.6, 21.0, 76.0, 41.0, 73.0, 0.0,
             explanation=["Лучшая тень в середине дня", "На 3 минуты дольше, но заметно меньше солнечной экспозиции", "Участки с более плотной зеленью"],
         ),
         RouteAlternative(
-            name="comfortable",
-            nodes=[origin, "N7", "N8", "N9", destination],
-            total_distance_km=1.7,
-            total_time_min=23.0,
-            average_shade=71.0,
-            greenery=51.0,
-            sidewalk_quality=91.0,
-            stairs=0.0,
+            "comfortable", [origin, "N7", "N8", "N9", destination], 1.7, 23.0, 71.0, 51.0, 91.0, 0.0,
             explanation=["Сохранён комфортный пешеходный характер маршрута", "Больше тротуаров и зелени", "Переходы лучше интегрированы в маршрут", "Меньше риска длительного воздействия солнца"],
         ),
     ]
-
-    route_payload = []
+    result: list[dict[str, Any]] = []
     for route in sorted(routes, key=lambda item: _weighted_route_score(item, normalised_weights)):
         payload = route.as_dict()
         payload.update({"date": date, "time": time, "weights": normalised_weights.copy()})
-        route_payload.append(payload)
-    return route_payload
+        result.append(payload)
+    return result

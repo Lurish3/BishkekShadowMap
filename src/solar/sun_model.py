@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from datetime import date, datetime, time
 from dataclasses import dataclass
+from datetime import datetime
+from math import isfinite
 
 
 @dataclass(frozen=True)
@@ -27,15 +28,18 @@ def estimate_solar_exposure(
     try:
         parsed_date = datetime.strptime(date, "%Y-%m-%d").date()
         parsed_time = datetime.strptime(time, "%H:%M").time()
-    except ValueError as exc:
+    except (TypeError, ValueError) as exc:
         raise ValueError("date must be YYYY-MM-DD and time must be HH:MM") from exc
+
+    values = (latitude, longitude, building_shadow_multiplier, tree_cover_multiplier)
+    if not all(isfinite(float(value)) for value in values):
+        raise ValueError("solar parameters must be finite numbers")
     if not -90 <= latitude <= 90 or not -180 <= longitude <= 180:
         raise ValueError("latitude/longitude are outside valid ranges")
-    if not 0 <= building_shadow_multiplier <= 1 or not 0 <= tree_cover_multiplier <= 1:
+    if not 0.0 <= building_shadow_multiplier <= 1.0 or not 0.0 <= tree_cover_multiplier <= 1.0:
         raise ValueError("shadow multipliers must be between 0 and 1")
 
     hour = parsed_time.hour + parsed_time.minute / 60.0
-    # A small seasonal adjustment keeps the date meaningful while retaining the MVP model.
     seasonal_factor = 1.0 + 0.08 * ((parsed_date.timetuple().tm_yday - 172) / 172)
     solar_angle = max(5.0, min(90.0 - abs(hour - 12.0) * 5.5, 78.0))
     base_exposure = max(0.0, 100.0 - abs(hour - 12.0) * 7.0) * seasonal_factor
@@ -50,5 +54,5 @@ def estimate_solar_exposure(
         longitude=longitude,
         solar_angle_deg=round(solar_angle, 2),
         exposure_index=round(adjusted_exposure, 2),
-        shade_probability=round(1.0 - adjusted_exposure / 100.0, 3),
+        shade_probability=round(max(0.0, min(1.0 - adjusted_exposure / 100.0, 1.0)), 3),
     )
