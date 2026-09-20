@@ -1,70 +1,70 @@
 # Bishkek Comfort Map
 
-Bishkek Comfort Map — GIS-прототип для поиска и анализа комфортных пешеходных маршрутов в Бишкеке. Проект показывает не один "лучший" маршрут, а набор разумных альтернатив с учётом времени, тени, зелени, тротуаров, переходов, лестниц, транспортной нагрузки и безопасности.
+Bishkek Comfort Map is a GIS prototype for finding and analyzing comfortable pedestrian routes in Bishkek. The project demonstrates how route choice can account not only for distance and travel time, but also for shade, greenery, sidewalks, crossings, safety, and changing conditions throughout the day.
 
-## Почему это важно
+## Why This Matters
 
-Граждане Бишкека сталкиваются с типичным набором проблем:
+Bishkek residents face a common set of problems:
 
-1. Маршрут строится без корректной учёта пешеходной сети и часто ведёт через неудобные участки.
-2. Одни и те же точки могут давать одинаковый маршрут в разное время суток, хотя условия меняются.
-3. Данные часто статичны и не отражают фактическую тень, зелёный покров и доступность переходов.
-4. Маршрут иногда ведёт через опасные места: дороги, некачественные участки, неудобные узкие проходы.
-5. Пользователь не может быстро выбрать части маршрута или пересчитать маршруты по другим условиям.
+1. Routes are built without properly accounting for the pedestrian network and often pass through inconvenient areas.
+2. The same origin and destination may produce the same route at different times of day, even though conditions change.
+3. Data is often static and does not reflect actual shade, greenery, or crossing availability.
+4. A route may pass through unsafe or uncomfortable areas, such as roads, poor-quality surfaces, or narrow passages.
+5. Users cannot quickly select route preferences or recalculate routes under different conditions.
 
-Этот проект решает проблему выбора маршрута не как задачку "найти кратчайший путь", а как задачу многокритериальной навигации: комфорт, безопасность, тень и скорость в одном интерфейсе.
+This project treats route selection not as a simple “find the shortest path” problem, but as a multi-criteria optimization problem. The goal is to show several meaningful alternatives and explain the trade-offs between them.
 
-## Цель проекта
+## Project Goal
 
-Показать, насколько комфорт-aware routing даёт дополнительную ценность пешеходам Бишкека по сравнению с обычной маршрутизацией. Результат может быть как положительным, так и отрицательным — проект исследует реальную пользу от модели, а не продаёт идею без проверки.
+To demonstrate how comfort-aware routing can provide additional value to pedestrians in Bishkek compared with conventional routing based primarily on distance or speed.
 
-## Аудитория
+## Audience
 
-- граждане Бишкека;
-- жители, которые ходят пешком по городу;
-- студенты, школьники, работники и люди, выбирающие маршрут по комфортности, не только по скорости;
-- исследователи городской мобильности и общественного пространства.
+- Bishkek residents;
+- people who walk around the city;
+- students, schoolchildren, workers, and anyone who chooses routes based on comfort rather than speed alone;
+- researchers studying urban mobility and public space.
 
-## Что показывает продукт
+## What the Product Shows
 
-- три и более альтернативных маршрута: быстрый, теневой, комфортный;
-- динамическое изменение маршрута по времени суток и дате;
-- слои: Solar Exposure, Greenery, Pedestrian Infrastructure, Comfort;
-- объяснения маршрутов: "+3 минуты, но -42% солнечной экспозиции, +18% тротуаров";
-- сравнение альтернатив по времени, расстоянию, тени, зелени и безопасности;
-- возможность менять веса: солнце, зелень, тротуары, лестницы, скорость;
-- маршруты пересчитываются при изменении параметров и временного окна.
+- three or more alternative routes: fastest, shadiest, and most comfortable;
+- dynamic route changes based on the time of day and date;
+- map layers for Solar Exposure, Greenery, Pedestrian Infrastructure, and Comfort;
+- route explanations such as “+3 minutes, but −42% solar exposure and +18% sidewalk coverage”;
+- comparisons of alternatives by time, distance, shade, greenery, and safety;
+- adjustable weights for sun exposure, greenery, sidewalks, stairs, and speed;
+- route recalculation when parameters or the time window change.
 
 ## MVP 0.1
 
-Минимальный рабочий прототип включает:
+The minimum working prototype includes:
 
-- небольшой участок Бишкека;
-- маршрут A→B;
-- пешеходный граф;
-- базовую солнечную модель;
-- временной слайдер;
-- 2–3 альтернативных маршрута;
-- основные метрики: время, расстояние, % тени, зелень, пояснения маршрута.
+- a small area of Bishkek;
+- an A→B route;
+- a pedestrian graph;
+- a basic solar model;
+- a time slider;
+- 2–3 alternative routes;
+- key metrics: time, distance, shade percentage, greenery, and route explanations.
 
-## План развития
+## Development Plan
 
 ### MVP 0.2
 
-- веса маршрута и пересчёт по пользовательским параметрам;
-- Pareto-оптимизация и альтернативы маршрутов;
-- слои городского контекста;
-- сравнение сценариев и объяснение выбора маршрута.
+- route weights and recalculation based on user preferences;
+- Pareto optimization and route alternatives;
+- urban context layers;
+- scenario comparison and route-choice explanations.
 
 ### MVP 0.3
 
-- What-if сценарии: "добавить дерево", "добавить переход";
-- Simulate Walk — визуализация движения по маршруту во времени;
+- What-if scenarios such as “add a tree” or “add a crossing”;
+- Simulate Walk — visualization of movement along a route over time;
 - School Mode;
-- транспорт и городской анализ;
-- расширенная аналитика по городской среде.
+- transport and urban analysis;
+- extended analytics for the urban environment.
 
-## Технический стек
+## Technology Stack
 
 - Python
 - GeoPandas
@@ -76,9 +76,9 @@ Bishkek Comfort Map — GIS-прототип для поиска и анализ
 - PostgreSQL / PostGIS
 - FastAPI
 - Leaflet / MapLibre
-- при необходимости: React / TypeScript
+- React / TypeScript, if needed
 
-## Архитектура
+## Architecture
 
 ```text
 BishkekShadowMap/
@@ -100,7 +100,7 @@ BishkekShadowMap/
 │   ├── greenery/
 │   │   └── __init__.py
 │   └── comfort/
-│       ├── __init__.py
+│       ��── __init__.py
 │       └── comfort_model.py
 ├── data/
 │   ├── raw/
@@ -122,150 +122,148 @@ BishkekShadowMap/
     └── architecture.md
 ```
 
-## Модель маршрута
+## Route Model
 
-Узел дорожной сети:
+A road-network node contains:
 
-- идентификатор;
-- координаты;
-- высота;
-- свойства окружающей среды.
+- an identifier;
+- coordinates;
+- elevation;
+- surrounding-environment properties.
 
-Ребро между узлами включает:
+An edge between nodes includes:
 
-- distance;
-- walking_time;
-- sun_exposure;
-- shade_ratio;
-- greenery;
-- sidewalk_quality;
-- stairs;
-- crossings;
-- transport_access;
-- timestamp / time conditions.
+- `distance`;
+- `walking_time`;
+- `sun_exposure`;
+- `shade_ratio`;
+- `greenery`;
+- `sidewalk_quality`;
+- `stairs`;
+- `crossings`;
+- `transport_access`;
+- a timestamp and time-dependent conditions.
 
-Функция эффективности:
+The objective function is:
 
 `Cost = w_time * t + w_sun * sun_exposure + w_sidewalk * penalty + w_stairs * penalty - w_greenery * greenery`
 
-Это даёт возможность использовать multi-objective routing и Pareto-оптимальные маршруты, а не один путь “по кратчайшему времени”.
+This makes it possible to use multi-objective routing and Pareto-optimal routes instead of selecting a single route based only on the shortest distance.
 
-## Условия данных
+## Data Requirements
 
-- OSM
-- здания и их геометрия
-- дороги и тротуары
-- деревья и зелёные зоны
-- переходы
-- транспорт
-- elevation / рельеф
-- открытые городские данные
+- OpenStreetMap (OSM);
+- buildings and their geometry;
+- roads and sidewalks;
+- trees and green areas;
+- crossings;
+- public transport;
+- elevation and terrain data;
+- open municipal data.
 
-Каждый набор данных должен быть документирован в README с источником, датой, уровнем качества и ограничениями.
+Each dataset should be documented in a README with its source, collection date, quality level, and limitations.
 
-## Научная гипотеза
+## Research Hypothesis
 
-Готовы ли пешеходы Бишкека идти дольше ради более комфортного маршрута? Для проверки проекта интересны:
+Are Bishkek pedestrians willing to walk longer in exchange for a more comfortable route? The project will investigate:
 
-- частота выбора комфортного маршрута;
-- допустимое увеличение времени;
-- повторное использование маршрута;
-- различия между днями и временем суток;
-- влияние тени, зелени и покрытия на решение.
+- how often users choose a comfortable route;
+- the acceptable increase in travel time;
+- repeated use of a route;
+- differences between days and times of day;
+- how shade, greenery, and surface quality influence decisions.
 
-Для несовершеннолетних и чувствительных к приватности сценариев используются только обезличенные данные без домашних адресов и индивидуальных траекторий.
+For scenarios involving minors or privacy-sensitive users, only anonymized data should be used.
 
-## Риски и ограничения
+## Risks and Limitations
 
-- солнечная модель — модельная оценка, а не физическое измерение;
-- нет полного 3D-моделирования на первом этапе;
-- проект не ставит целью real-time навигацию;
-- в MVP не планируются аккаунты, социальные функции, реклама или мобильное приложение;
-- точность зависит от качества исходных геоданных и их актуальности.
+- the solar model is an estimate, not a physical measurement;
+- full 3D modeling is not planned for the first stage;
+- the project is not intended to provide real-time navigation;
+- the MVP does not plan to include accounts, social features, advertising, or a mobile application;
+- accuracy depends on the quality and freshness of the source geodata.
 
-## Запуск локально
+## Local Setup
 
-1. Клонируйте репозиторий:
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/Lurish3/BishkekShadowMap.git
 cd BishkekShadowMap
 ```
 
-2. Создайте virtual environment:
+2. Create a virtual environment:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 ```
 
-3. Установите зависимости:
+3. Install the dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Запустите API:
+4. Start the API:
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-5. Откройте:
+5. Open the API documentation:
 
 ```text
 http://127.0.0.1:8000/docs
 ```
 
-## Проверка качества
+## Quality Checks
 
-Проект проверяет логику маршрута и альтернативных решений в тестах. Примерные проверки:
+The project tests route logic and alternative route selection. Example checks include:
 
-- корректный порядок маршрутов;
-- Pareto-оптимальность;
-- правило пересчёта маршрута по времени/условиям;
-- приоритет безопасности и удобства над пустой скоростью.
+- correct route ordering;
+- Pareto optimality;
+- route recalculation based on time and conditions;
+- prioritization of safety and comfort over speed alone.
 
 ## Roadmap
 
-- 0.1: базовый маршрут A→B, граф, солнечная модель, временной слайдер, 2–3 альтернативы;
-- 0.2: веса маршрута, Pareto, слои, путь объяснений и сравнение маршрутов;
-- 0.3: What-if, Simulate Walk, School Mode, транспорт и аналитика;
-- дальше: валидация на реальных данных, исследование поведения пешеходов и оценка ценности модели.
+- **0.1:** basic A→B route, graph, solar model, time slider, and 2–3 alternatives;
+- **0.2:** route weights, Pareto optimization, layers, route explanations, and route comparison;
+- **0.3:** What-if scenarios, Simulate Walk, School Mode, transport, and analytics;
+- **Later:** validation with real-world data, research into pedestrian behavior, and evaluation of the model’s value.
 
-## Что делает проект сильным для портфолио
+## What Makes This Project Strong for a Portfolio
 
-Этот проект сочетает несколько слоёв ценности:
+This project combines several layers of value:
 
-- городская аналитика;
-- GIS и пространственные данные;
-- маршрутизация и оптимизация;
-- математическая модель и multi-objective optimisation;
-- исследовательская логика и продуктовая часть;
-- понятная бизнес- и социальная проблема.
+- urban analytics;
+- GIS and spatial data;
+- routing and optimization;
+- mathematical modeling and multi-objective optimization;
+- research methodology and product thinking;
+- a clear business and social problem.
 
-Это не просто картографический проект. Это продуктовая идея, построенная на реальной пользовательской боли и проверяемой гипотезе.
+This is more than a mapping project. It is a product concept built around a real user problem: helping people choose routes that are not only fast, but also safer and more comfortable.
 
-## Ценность для стартапа
+## Startup Value
 
-Потенциальная ценность проекта — не в создании ещё одного навигатора, а в создании метрики качества прогулки на основе городской среды. Если пользователи действительно готовы идти дольше ради тени, зелени и безопасности, то у проекта есть реальный рыночный и общественный смысл.
+The potential value of the project is not in creating another navigation app, but in developing a metric for the quality of pedestrian movement through the city. This can become part of urban infrastructure and a useful digital service for residents, rather than just another technical map.
 
-Это становится частью городской инфраструктуры и полезным цифровым сервисом для жителей, а не просто технологическим экспериментом.
-
-## Лицензия
+## License
 
 MIT
 
-## Контакты
+## Contact
 
-Проект развивается в направлении от исследовательского прототипа к демонстрационной рабочей платформе для GitHub-портфолио и дальнейшего потенциального развития.
+The project is evolving from a research prototype into a working demonstration platform for urban comfort-aware routing.
 
-Автор: Lurish3
+Author: Lurish3
 
-Ссылка на репозиторий: https://github.com/Lurish3/BishkekShadowMap
+Repository: https://github.com/Lurish3/BishkekShadowMap
 
 ---
 
-Bishkek Comfort Map is a dynamic, comfort-aware pedestrian routing prototype for Bishkek. The project does not aim for a single “best route”; it models trade-offs between speed, shade, greenery, safety, and usability in a way that makes urban walking decisions more realistic and more context-aware.
+Bishkek Comfort Map is a dynamic, comfort-aware pedestrian routing prototype for Bishkek. The project does not aim to identify a single “best route”; it models trade-offs between speed, shade, greenery, pedestrian infrastructure, safety, and other route characteristics.
 
 This is a portfolio-grade project built at the intersection of GIS, routing, environmental modeling, and product thinking.
